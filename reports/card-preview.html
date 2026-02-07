@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>X卡片预览 - 《历史的终结》哲学解构报告</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans SC", sans-serif;
+            background: #1a1a2e;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+        
+        .card-container {
+            position: relative;
+            width: 1200px;
+            height: 628px;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+        }
+        
+        /* 装饰圆圈 */
+        .card-container::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 400px;
+            height: 400px;
+            background: rgba(155, 89, 182, 0.15);
+            border-radius: 50%;
+        }
+        
+        .card-container::after {
+            content: '';
+            position: absolute;
+            bottom: -50px;
+            left: -50px;
+            width: 300px;
+            height: 300px;
+            background: rgba(231, 76, 60, 0.1);
+            border-radius: 50%;
+        }
+        
+        .card-content {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            height: 100%;
+            padding: 60px;
+        }
+        
+        /* 左侧书籍区域 */
+        .book-section {
+            width: 35%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .book-cover {
+            width: 280px;
+            height: 420px;
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            border-radius: 8px;
+            box-shadow: 
+                0 20px 40px rgba(0,0,0,0.4),
+                inset 0 0 0 2px rgba(255,255,255,0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .book-cover::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: rgba(0,0,0,0.2);
+        }
+        
+        .book-title-en {
+            font-size: 14px;
+            color: rgba(255,255,255,0.6);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .book-title {
+            font-size: 32px;
+            font-weight: bold;
+            color: #fff;
+            text-align: center;
+            line-height: 1.4;
+            margin-bottom: 30px;
+        }
+        
+        .book-author {
+            font-size: 16px;
+            color: rgba(255,255,255,0.7);
+            text-align: center;
+        }
+        
+        .book-year {
+            position: absolute;
+            bottom: 30px;
+            font-size: 14px;
+            color: rgba(255,255,255,0.4);
+        }
+        
+        /* 右侧文字区域 */
+        .text-section {
+            width: 65%;
+            padding-left: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .main-title {
+            font-size: 56px;
+            font-weight: bold;
+            color: #fff;
+            line-height: 1.3;
+            margin-bottom: 20px;
+        }
+        
+        .main-title span {
+            color: #9b59b6;
+        }
+        
+        .subtitle {
+            font-size: 28px;
+            color: #bbb;
+            margin-bottom: 30px;
+        }
+        
+        .author-line {
+            font-size: 22px;
+            color: #9b59b6;
+            margin-bottom: 40px;
+        }
+        
+        /* 标签 */
+        .tags {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+        
+        .tag {
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-size: 18px;
+            color: #fff;
+        }
+        
+        .tag.hegel { background: rgba(155, 89, 182, 0.4); }
+        .tag.kojeve { background: rgba(231, 76, 60, 0.4); }
+        .tag.nietzsche { background: rgba(243, 156, 18, 0.4); }
+        
+        /* CTA */
+        .cta {
+            font-size: 22px;
+            color: rgba(255,255,255,0.6);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .cta-arrow {
+            animation: bounce 1s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(10px); }
+        }
+        
+        /* 底部标识 */
+        .footer-brand {
+            position: absolute;
+            bottom: 30px;
+            right: 40px;
+            font-size: 18px;
+            color: rgba(255,255,255,0.4);
+            z-index: 20;
+        }
+        
+        /* 截图提示 */
+        .screenshot-hint {
+            margin-top: 40px;
+            color: rgba(255,255,255,0.6);
+            font-size: 16px;
+            text-align: center;
+        }
+        
+        .download-btn {
+            margin-top: 20px;
+            padding: 15px 40px;
+            background: #9b59b6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .download-btn:hover {
+            background: #8e44ad;
+            transform: translateY(-2px);
+        }
+        
+        @media (max-width: 1280px) {
+            .card-container {
+                transform: scale(0.7);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="card-container" id="card">
+        <div class="card-content">
+            <div class="book-section">
+                <div class="book-cover">
+                    <div class="book-title-en">The End of History<br>and the Last Man</div>
+                    <div class="book-title">历史的终结<br>与最后的人</div>
+                    <div class="book-author">弗朗西斯 · 福山</div>
+                    <div class="book-year">1992</div>
+                </div>
+            </div>
+            <div class="text-section">
+                <div class="main-title">哲学<span>解构</span>报告</div>
+                <div class="subtitle">从黑格尔到尼采，解构历史目的论</div>
+                <div class="author-line">Francis Fukuyama</div>
+                <div class="tags">
+                    <span class="tag hegel">⚔️ 主奴辩证法</span>
+                    <span class="tag kojeve">🙏 认可</span>
+                    <span class="tag nietzsche">😔 最后的人</span>
+                </div>
+                <div class="cta">
+                    点击阅读完整报告 <span class="cta-arrow">→</span>
+                </div>
+            </div>
+        </div>
+        <div class="footer-brand">🐯 小老虎制作</div>
+    </div>
+    
+    <p class="screenshot-hint">
+        💡 提示：使用浏览器截图工具截取上方卡片区域（1200×628），保存后上传到X<br>
+        或使用下方按钮保存为图片
+    </p>
+    
+    <button class="download-btn" onclick="downloadCard()">下载卡片图片</button>
+
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script>
+        function downloadCard() {
+            const card = document.getElementById('card');
+            html2canvas(card, {
+                scale: 2,
+                backgroundColor: null,
+                useCORS: true
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = '历史的终结-哲学解构报告-卡片.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            }).catch(err => {
+                alert('下载失败，请使用浏览器截图工具手动截取');
+                console.error(err);
+            });
+        }
+        
+        // 自动提示
+        setTimeout(() => {
+            console.log('💡 提示：按 F12 打开控制台，输入 downloadCard() 可以下载高清图片');
+        }, 1000);
+    </script>
+</body>
+</html>
